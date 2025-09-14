@@ -1,657 +1,905 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VSO Solutions | Enterprise IT Solutions & Digital Transformation</title>
-    <meta name="description" content="Transform your business with cutting-edge IT solutions. AI automation, cloud services, data analytics, and seamless integrations. Book a consultation today.">
-    
+    <title>VSO Solutions | Enterprise IT Solutions</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- React Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel Compiler (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 
     <style>
-        :root {
-            --primary: #0ea5e9;
-            --primary-dark: #0284c7;
-            --secondary: #6366f1;
-            --accent: #10b981;
-            --dark: #0f172a;
-            --gray: #64748b;
-            --light: #f8fafc;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
         body {
             font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
-
         h1, h2, h3 {
             font-family: 'Space Grotesk', sans-serif;
         }
-
-        /* Custom animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        
+        /* Professional Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn { animation: fadeIn 0.6s ease-out; }
+        
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
 
-        .float-animation {
-            animation: float 6s ease-in-out infinite;
+        /* Form Styling */
+        .form-input {
+            transition: all 0.3s ease;
+            border: 1px solid #D1D5DB; /* gray-300 */
+            background-color: #F9FAFB; /* gray-50 */
         }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        
+        .form-input:focus {
+            border-color: #3B82F6; /* blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+            background-color: #FFFFFF;
         }
-
-        .gradient-animation {
-            background: linear-gradient(-45deg, #0ea5e9, #6366f1, #10b981, #0284c7);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-        }
-
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Service card hover effect */
-        .service-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px) scale(1.02);
-        }
-
-        /* Smooth scroll behavior */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #0ea5e9, #6366f1);
-            border-radius: 5px;
-        }
-
-        /* Appointment calendar styles */
-        .calendar-day {
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-
-        .calendar-day:hover:not(.disabled) {
-            background-color: #f0f9ff;
-            color: #0c4a6e;
-        }
-        .calendar-day.selected {
-            background: #0ea5e9;
-            color: white;
-            transform: scale(1.1);
-            font-weight: bold;
-        }
-        .calendar-day.disabled {
-            color: #cbd5e1;
-            cursor: not-allowed;
-        }
+        
+        /* Time Slot Styling */
         .time-slot {
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            border: 1px solid #D1D5DB; /* gray-300 */
         }
+        
+        .time-slot:hover {
+            border-color: #3B82F6; /* blue-500 */
+            background: #EFF6FF; /* blue-50 */
+        }
+        
         .time-slot.selected {
-             background: #0ea5e9;
-             color: white;
-             border-color: #0ea5e9;
+            background: #2563EB; /* blue-600 */
+            color: white;
+            border-color: #2563EB; /* blue-600 */
+            transform: scale(1.05);
+        }
+
+        /* Success Indicator */
+        .success-indicator {
+            background-color: #10B981; /* green-500 */
+        }
+
+        /* Loading Animation */
+        .loading-dots::after {
+            content: '...';
+            display: inline-block;
+            animation: loading-dots 1.5s infinite steps(3, end);
+            width: 20px;
+        }
+
+        @keyframes loading-dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9; /* slate-100 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #64748B; /* slate-500 */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; /* slate-600 */
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased">
-
-    <nav class="fixed w-full top-0 z-50 glass-effect bg-white/90">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="#" class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                    <span class="font-bold text-xl bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">VSO Solutions</span>
-                </a>
-
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#services" class="text-slate-600 hover:text-sky-600 font-medium transition-colors">Services</a>
-                    <a href="#solutions" class="text-slate-600 hover:text-sky-600 font-medium transition-colors">Solutions</a>
-                    <a href="#case-studies" class="text-slate-600 hover:text-sky-600 font-medium transition-colors">Case Studies</a>
-                    <a href="#about" class="text-slate-600 hover:text-sky-600 font-medium transition-colors">About</a>
-                    <a href="#appointment" class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-all hover:scale-105">
-                        Book Consultation
-                    </a>
-                </div>
-
-                <button class="md:hidden p-2" id="mobileMenuButton">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
-            <div class="px-4 py-3 space-y-2">
-                <a href="#services" class="block px-3 py-2 text-slate-600 hover:bg-sky-50 rounded-lg">Services</a>
-                <a href="#solutions" class="block px-3 py-2 text-slate-600 hover:bg-sky-50 rounded-lg">Solutions</a>
-                <a href="#case-studies" class="block px-3 py-2 text-slate-600 hover:bg-sky-50 rounded-lg">Case Studies</a>
-                <a href="#about" class="block px-3 py-2 text-slate-600 hover:bg-sky-50 rounded-lg">About</a>
-                <a href="#appointment" class="block px-3 py-2 bg-sky-500 text-white rounded-lg text-center font-semibold">Book Consultation</a>
-            </div>
-        </div>
-    </nav>
-
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-        <div class="absolute inset-0 gradient-animation opacity-10"></div>
-        
-        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239CA3AF" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"></div>
-
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div class="text-center">
-                <div class="inline-flex items-center px-4 py-2 bg-sky-100 text-sky-700 rounded-full text-sm font-medium mb-6">
-                    <span class="w-2 h-2 bg-sky-500 rounded-full mr-2 animate-pulse"></span>
-                    Trusted by 100+ Enterprises
-                </div>
-
-                <h1 class="text-5xl md:text-7xl font-bold mb-6">
-                    <span class="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Transform Your Business with</span>
-                    <br/>
-                    <span class="bg-gradient-to-r from-sky-500 to-indigo-600 bg-clip-text text-transparent">Intelligent IT Solutions</span>
-                </h1>
-
-                <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-10">
-                    From AI automation to cloud infrastructure, we deliver enterprise-grade solutions that drive growth, efficiency, and innovation.
-                </p>
-
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#appointment" class="px-8 py-4 bg-gradient-to-r from-sky-500 to-indigo-600 text-white rounded-xl font-semibold text-lg hover:shadow-xl transition-all hover:scale-105">
-                        Schedule Free Consultation
-                    </a>
-                    <a href="#services" class="px-8 py-4 bg-white text-slate-900 rounded-xl font-semibold text-lg border-2 border-slate-200 hover:border-sky-500 transition-all">
-                        Explore Services →
-                    </a>
-                </div>
-
-                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-sky-600">500+</div>
-                        <div class="text-slate-600">Projects Delivered</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-indigo-600">99.9%</div>
-                        <div class="text-slate-600">Uptime SLA</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-emerald-600">24/7</div>
-                        <div class="text-slate-600">Support Available</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-3xl font-bold text-purple-600">50+</div>
-                        <div class="text-slate-600">Tech Experts</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="absolute top-20 left-10 w-20 h-20 bg-sky-500 rounded-full opacity-10 float-animation"></div>
-        <div class="absolute bottom-20 right-10 w-32 h-32 bg-indigo-500 rounded-full opacity-10 float-animation" style="animation-delay: 2s;"></div>
-    </section>
-
-    <section id="services" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Our Core Services</h2>
-                <p class="text-xl text-slate-600 max-w-2xl mx-auto">
-                    Comprehensive IT solutions tailored to your business needs
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="service-card group relative bg-gradient-to-br from-sky-50 to-white p-8 rounded-2xl border border-sky-100 hover:shadow-2xl">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-sky-500 rounded-full opacity-5 -mr-16 -mt-16"></div>
-                    <div class="relative">
-                        <div class="w-14 h-14 bg-gradient-to-br from-sky-400 to-sky-600 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-3">AI Automation</h3>
-                        <p class="text-slate-600 mb-4">
-                            Intelligent process automation, machine learning models, and AI-powered workflows that transform your operations.
-                        </p>
-                        <ul class="text-sm space-y-2 text-slate-600 mb-6">
-                            <li class="flex items-center"><span class="text-sky-500 mr-2">✓</span> Custom AI Models</li>
-                            <li class="flex items-center"><span class="text-sky-500 mr-2">✓</span> Process Automation</li>
-                            <li class="flex items-center"><span class="text-sky-500 mr-2">✓</span> Predictive Analytics</li>
-                        </ul>
-                        <a href="#appointment" class="inline-flex items-center text-sky-600 font-semibold group-hover:text-sky-700">
-                            Learn more →
-                        </a>
-                    </div>
-                </div>
-
-                <div class="service-card group relative bg-gradient-to-br from-indigo-50 to-white p-8 rounded-2xl border border-indigo-100 hover:shadow-2xl">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500 rounded-full opacity-5 -mr-16 -mt-16"></div>
-                    <div class="relative">
-                        <div class="w-14 h-14 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-3">Web Services</h3>
-                        <p class="text-slate-600 mb-4">
-                            Modern web applications, APIs, and digital experiences built with cutting-edge technologies.
-                        </p>
-                        <ul class="text-sm space-y-2 text-slate-600 mb-6">
-                            <li class="flex items-center"><span class="text-indigo-500 mr-2">✓</span> Progressive Web Apps</li>
-                            <li class="flex items-center"><span class="text-indigo-500 mr-2">✓</span> RESTful APIs</li>
-                            <li class="flex items-center"><span class="text-indigo-500 mr-2">✓</span> E-commerce Solutions</li>
-                        </ul>
-                        <a href="#appointment" class="inline-flex items-center text-indigo-600 font-semibold group-hover:text-indigo-700">
-                            Learn more →
-                        </a>
-                    </div>
-                </div>
-
-                <div class="service-card group relative bg-gradient-to-br from-emerald-50 to-white p-8 rounded-2xl border border-emerald-100 hover:shadow-2xl">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full opacity-5 -mr-16 -mt-16"></div>
-                    <div class="relative">
-                        <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-3">Cloud Services</h3>
-                        <p class="text-slate-600 mb-4">
-                            Scalable cloud infrastructure, migration services, and managed cloud solutions for optimal performance.
-                        </p>
-                        <ul class="text-sm space-y-2 text-slate-600 mb-6">
-                            <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> AWS & Azure</li>
-                            <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Cloud Migration</li>
-                            <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> DevOps & CI/CD</li>
-                        </ul>
-                        <a href="#appointment" class="inline-flex items-center text-emerald-600 font-semibold group-hover:text-emerald-700">
-                            Learn more →
-                        </a>
-                    </div>
-                </div>
-
-                <div class="service-card group relative bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl border border-purple-100 hover:shadow-2xl">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500 rounded-full opacity-5 -mr-16 -mt-16"></div>
-                    <div class="relative">
-                        <div class="w-14 h-14 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-3">Data Analytics</h3>
-                        <p class="text-slate-600 mb-4">
-                            Transform raw data into actionable insights with advanced analytics and visualization tools.
-                        </p>
-                        <ul class="text-sm space-y-2 text-slate-600 mb-6">
-                            <li class="flex items-center"><span class="text-purple-500 mr-2">✓</span> Business Intelligence</li>
-                            <li class="flex items-center"><span class="text-purple-500 mr-2">✓</span> Data Warehousing</li>
-                            <li class="flex items-center"><span class="text-purple-500 mr-2">✓</span> Real-time Analytics</li>
-                        </ul>
-                        <a href="#appointment" class="inline-flex items-center text-purple-600 font-semibold group-hover:text-purple-700">
-                            Learn more →
-                        </a>
-                    </div>
-                </div>
-
-                <div class="service-card group relative bg-gradient-to-br from-amber-50 to-white p-8 rounded-2xl border border-amber-100 hover:shadow-2xl">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500 rounded-full opacity-5 -mr-16 -mt-16"></div>
-                    <div class="relative">
-                        <div class="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2h2m3-4H9a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-1m-1 4l-3 3m0 0l-3-3m3 3V3"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-3">System Integrations</h3>
-                        <p class="text-slate-600 mb-4">
-                            Seamlessly connect your systems and applications for unified operations and data flow.
-                        </p>
-                        <ul class="text-sm space-y-2 text-slate-600 mb-6">
-                            <li class="flex items-center"><span class="text-amber-500 mr-2">✓</span> API Integration</li>
-                            <li class="flex items-center"><span class="text-amber-500 mr-2">✓</span> ERP/CRM Systems</li>
-                            <li class="flex items-center"><span class="text-amber-500 mr-2">✓</span> Custom Connectors</li>
-                        </ul>
-                        <a href="#appointment" class="inline-flex items-center text-amber-600 font-semibold group-hover:text-amber-700">
-                            Learn more →
-                        </a>
-                    </div>
-                </div>
-
-                <div class="service-card group relative bg-gradient-to-br from-rose-50 to-white p-8 rounded-2xl border border-rose-100 hover:shadow-2xl">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500 rounded-full opacity-5 -mr-16 -mt-16"></div>
-                    <div class="relative">
-                        <div class="w-14 h-14 bg-gradient-to-br from-rose-400 to-rose-600 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-3">IT Support & Consulting</h3>
-                        <p class="text-slate-600 mb-4">
-                            24/7 technical support and strategic IT consulting to keep your business running smoothly.
-                        </p>
-                        <ul class="text-sm space-y-2 text-slate-600 mb-6">
-                            <li class="flex items-center"><span class="text-rose-500 mr-2">✓</span> Managed Services</li>
-                            <li class="flex items-center"><span class="text-rose-500 mr-2">✓</span> Security Audits</li>
-                            <li class="flex items-center"><span class="text-rose-500 mr-2">✓</span> IT Strategy</li>
-                        </ul>
-                        <a href="#appointment" class="inline-flex items-center text-rose-600 font-semibold group-hover:text-rose-700">
-                            Learn more →
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="solutions" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Tailored Solutions for Your Industry</h2>
-                <p class="text-xl text-slate-600 max-w-3xl mx-auto">
-                    We leverage our deep expertise to solve the unique challenges faced by key sectors, driving efficiency, compliance, and growth.
-                </p>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="service-card group bg-gradient-to-br from-emerald-50 to-white p-8 rounded-2xl border border-emerald-100 hover:shadow-2xl">
-                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">For Hospitals & Healthcare 🏥</h3>
-                    <p class="text-slate-600 mb-4">
-                        Enhance patient care, streamline operations, and ensure data security with solutions designed for the complexities of the healthcare sector.
-                    </p>
-                    <ul class="text-sm space-y-2 text-slate-600">
-                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Secure EHR/EMR cloud migration & management.</li>
-                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> AI-powered diagnostic tools & predictive analysis.</li>
-                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Custom patient portals and telemedicine platforms.</li>
-                        <li class="flex items-center"><span class="text-emerald-500 mr-2">✓</span> Automated billing and insurance claim processing.</li>
-                    </ul>
-                </div>
-
-                <div class="service-card group bg-gradient-to-br from-sky-50 to-white p-8 rounded-2xl border border-sky-100 hover:shadow-2xl">
-                    <div class="w-14 h-14 bg-gradient-to-br from-sky-400 to-sky-600 rounded-xl flex items-center justify-center mb-6">
-                         <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.75A.75.75 0 013 4.5h.75m0 0a.75.75 0 01.75.75v.75m0 0h.75a.75.75 0 01.75-.75V5.25m0 0A.75.75 0 015.25 6h.75m0 0v.75a.75.75 0 01-.75.75h-.75M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">For Finance & Banking 🏦</h3>
-                    <p class="text-slate-600 mb-4">
-                        Navigate the high-stakes financial landscape with secure, high-performance IT that mitigates risk and drives customer trust.
-                    </p>
-                    <ul class="text-sm space-y-2 text-slate-600">
-                        <li class="flex items-center"><span class="text-sky-500 mr-2">✓</span> AI-driven real-time fraud detection systems.</li>
-                        <li class="flex items-center"><span class="text-sky-500 mr-2">✓</span> High-frequency trading infrastructure on the cloud.</li>
-                        <li class="flex items-center"><span class="text-sky-500 mr-2">✓</span> Data analytics for risk assessment and market insights.</li>
-                        <li class="flex items-center"><span class="text-sky-500 mr-2">✓</span> Integration of legacy systems with modern fintech APIs.</li>
-                    </ul>
-                </div>
-
-                <div class="service-card group bg-gradient-to-br from-indigo-50 to-white p-8 rounded-2xl border border-indigo-100 hover:shadow-2xl">
-                    <div class="w-14 h-14 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold mb-3">For Manufacturing & Industry 🏭</h3>
-                    <p class="text-slate-600 mb-4">
-                        Transform your production floor and supply chain with smart solutions that boost output, reduce downtime, and optimize logistics.
-                    </p>
-                    <ul class="text-sm space-y-2 text-slate-600">
-                        <li class="flex items-center"><span class="text-indigo-500 mr-2">✓</span> IoT and AI for predictive machinery maintenance.</li>
-                        <li class="flex items-center"><span class="text-indigo-500 mr-2">✓</span> Data analytics to optimize supply chain & inventory.</li>
-                        <li class="flex items-center"><span class="text-indigo-500 mr-2">✓</span> Automated quality control using computer vision.</li>
-                        <li class="flex items-center"><span class="text-indigo-500 mr-2">✓</span> ERP and SCM system integration and modernization.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="appointment" class="py-20 bg-gradient-to-br from-slate-900 to-slate-800">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-white mb-4">Book Your Free Consultation</h2>
-                <p class="text-xl text-slate-300 max-w-2xl mx-auto">
-                    Let's discuss your IT challenges and discover how we can transform your business.
-                </p>
-            </div>
-
-            <div class="grid lg:grid-cols-2 gap-12 items-start">
-                <div class="bg-white rounded-2xl p-8 shadow-xl">
-                    <h3 class="text-2xl font-semibold mb-6">1. Select a Date & Time</h3>
-                    
-                    <div class="mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <button class="p-2 hover:bg-slate-100 rounded-full">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                                </svg>
-                            </button>
-                            <h4 class="font-semibold text-lg">September 2025</h4>
-                            <button class="p-2 hover:bg-slate-100 rounded-full">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </button>
-                        </div>
-                        
-                        <div class="grid grid-cols-7 gap-1 text-center text-sm">
-                            <div class="py-2 text-xs text-slate-500 font-medium">Sun</div>
-                            <div class="py-2 text-xs text-slate-500 font-medium">Mon</div>
-                            <div class="py-2 text-xs text-slate-500 font-medium">Tue</div>
-                            <div class="py-2 text-xs text-slate-500 font-medium">Wed</div>
-                            <div class="py-2 text-xs text-slate-500 font-medium">Thu</div>
-                            <div class="py-2 text-xs text-slate-500 font-medium">Fri</div>
-                            <div class="py-2 text-xs text-slate-500 font-medium">Sat</div>
-                            
-                            <div class="p-2 disabled"></div>
-                            <div class="calendar-day p-2">1</div>
-                            <div class="calendar-day p-2">2</div>
-                            <div class="calendar-day p-2">3</div>
-                            <div class="calendar-day p-2">4</div>
-                            <div class="calendar-day p-2">5</div>
-                            <div class="calendar-day p-2 disabled selected">6</div>
-                            <div class="calendar-day p-2 disabled">7</div>
-                            <div class="calendar-day p-2">8</div>
-                            <div class="calendar-day p-2">9</div>
-                            <div class="calendar-day p-2">10</div>
-                            <div class="calendar-day p-2">11</div>
-                            <div class="calendar-day p-2">12</div>
-                            <div class="calendar-day p-2 disabled">13</div>
-                            <div class="calendar-day p-2 disabled">14</div>
-                            <div class="calendar-day p-2">15</div>
-                            <div class="calendar-day p-2">16</div>
-                            <div class="calendar-day p-2">17</div>
-                            <div class="calendar-day p-2">18</div>
-                            <div class="calendar-day p-2">19</div>
-                            <div class="calendar-day p-2">20</div>
-                            <div class="calendar-day p-2 disabled">21</div>
-                            <div class="calendar-day p-2">22</div>
-                            <div class="calendar-day p-2">23</div>
-                            <div class="calendar-day p-2">24</div>
-                            <div class="calendar-day p-2">25</div>
-                            <div class="calendar-day p-2">26</div>
-                            <div class="calendar-day p-2">27</div>
-                            <div class="calendar-day p-2 disabled">28</div>
-                            <div class="calendar-day p-2">29</div>
-                            <div class="calendar-day p-2">30</div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 class="font-semibold mb-4">Available Times (IST)</h4>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button class="time-slot p-2 border rounded-lg hover:bg-sky-100 hover:border-sky-500">09:00 AM</button>
-                            <button class="time-slot p-2 border rounded-lg hover:bg-sky-100 hover:border-sky-500">10:00 AM</button>
-                            <button class="time-slot p-2 border rounded-lg hover:bg-sky-100 hover:border-sky-500">11:00 AM</button>
-                            <button class="time-slot p-2 border rounded-lg hover:bg-sky-100 hover:border-sky-500">02:00 PM</button>
-                            <button class="time-slot selected p-2 border rounded-lg hover:bg-sky-100 hover:border-sky-500">03:00 PM</button>
-                            <button class="time-slot p-2 border rounded-lg hover:bg-sky-100 hover:border-sky-500">04:00 PM</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl p-8 shadow-xl">
-                    <h3 class="text-2xl font-semibold mb-6">2. Your Details</h3>
-                    <form action="#" method="POST" class="space-y-6">
-                        <div>
-                            <label for="full-name" class="block text-sm font-medium text-slate-700">Full Name</label>
-                            <input type="text" name="full-name" id="full-name" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" placeholder="Jane Doe">
-                        </div>
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-slate-700">Work Email</label>
-                            <input type="email" name="email" id="email" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" placeholder="you@company.com">
-                        </div>
-                         <div>
-                            <label for="company" class="block text-sm font-medium text-slate-700">Company Name</label>
-                            <input type="text" name="company" id="company" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" placeholder="Acme Inc.">
-                        </div>
-                        <div>
-                            <label for="message" class="block text-sm font-medium text-slate-700">Tell us about your project</label>
-                            <textarea id="message" name="message" rows="4" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500" placeholder="We're looking to build..."></textarea>
-                        </div>
-                        <div>
-                            <button type="submit" class="w-full px-8 py-4 bg-gradient-to-r from-sky-500 to-indigo-600 text-white rounded-xl font-semibold text-lg hover:shadow-xl transition-all hover:scale-105">
-                                Confirm Appointment
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="case-studies" class="py-20 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-bold mb-4">Success Stories</h2>
-            <p class="text-xl text-slate-600 max-w-2xl mx-auto">
-                Placeholder for detailed case studies showcasing client successes and project outcomes.
-            </p>
-        </div>
-    </section>
-
-    <section id="about" class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl font-bold mb-4">About VSO Solutions</h2>
-            <p class="text-xl text-slate-600 max-w-2xl mx-auto">
-                Placeholder for company mission, vision, values, and team information.
-            </p>
-        </div>
-    </section>
     
-    <footer class="bg-slate-900 text-slate-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <div class="col-span-2 md:col-span-1">
-                    <a href="#" class="flex items-center space-x-3 mb-4">
-                        <div class="w-10 h-10 bg-gradient-to-br from-sky-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                           <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Initialize EmailJS
+        // emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your EmailJS public key
+
+        // --- SVG Icons ---
+        const BoltIcon = () => (
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+        );
+        const ComputerIcon = () => (
+            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+        );
+        const WebIcon = () => (
+             <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+            </svg>
+        );
+        const CloudIcon = () => (
+            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+            </svg>
+        );
+        const AnalyticsIcon = () => (
+            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+        );
+        const IntegrationIcon = () => (
+            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2h2m3-4H9a2 2 0 00-2 2v7a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-1m-1 4l-3 3m0 0l-3-3m3 3V3"/>
+            </svg>
+        );
+        const SupportIcon = () => (
+            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+        );
+
+        // --- Data for Services and Case Studies ---
+        const caseStudiesData = [
+            {
+                id: 'cs1',
+                serviceId: 's1',
+                client: "Global Logistics Inc.",
+                industry: "Logistics & Supply Chain",
+                location: "Frankfurt, Germany",
+                title: "AI-Powered Invoice Automation Reduces Processing Time by 95%",
+                subtitle: "Revolutionary OCR and NLP Solution Transforms Financial Operations",
+                timeline: "6 months implementation",
+                teamSize: "8 specialists",
+                challenge: {
+                    title: "The Challenge: Manual Overload and Costly Errors",
+                    content: "Global Logistics Inc., managing €2.8B in annual transactions across 45 countries, faced a critical bottleneck. Their accounts payable team was manually processing over 20,000 invoices monthly from 3,000+ vendors worldwide. This manual-first approach was not only slow and expensive but also prone to significant human error, leading to incorrect data entry, compliance issues, and delayed payments that strained vendor relationships.",
+                    metrics: ["20,000+ invoices/month", "€180,000 monthly losses", "15-20 min per invoice", "50+ invoice formats"]
+                },
+                solution: {
+                    title: "Our Solution: An Intelligent Automation Ecosystem",
+                    content: "VSO Solutions architected a comprehensive AI-powered automation platform using advanced Computer Vision and Natural Language Processing. Our solution featured: Custom-trained OCR models for multi-language invoice recognition, intelligent data extraction algorithms that adapt to new formats, seamless ERP integration with SAP and Oracle systems, real-time validation against purchase orders and contracts, automated approval workflows with intelligent routing, and predictive analytics for cash flow optimization.",
+                    technologies: ["TensorFlow", "Azure Cognitive Services", "Python", "SAP Integration", "Power Automate"]
+                },
+                results: [
+                    { value: "95%", label: "Reduction in Processing Time" },
+                    { value: "€2.1M", label: "Annual Cost Savings" },
+                    { value: "99.7%", label: "Data Accuracy Rate" },
+                    { value: "48hrs", label: "Faster Payment Cycles" }
+                ],
+                testimonial: {
+                    text: "VSO Solutions didn't just solve our invoice problem - they revolutionized our entire financial operation. The ROI was evident within 3 months.",
+                    author: "Maria Schmidt",
+                    role: "CFO, Global Logistics Inc.",
+                    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=faces"
+                }
+            },
+            {
+                id: 'cs2',
+                serviceId: 's3',
+                client: "HealthFirst Diagnostics",
+                industry: "Healthcare & Medical",
+                location: "Toronto, Canada",
+                title: "Secure Cloud Migration Enables 300% Faster Medical Image Access",
+                subtitle: "HIPAA-Compliant Infrastructure Transformation Saves Lives",
+                timeline: "4 months zero-downtime migration",
+                teamSize: "12 cloud specialists",
+                challenge: {
+                    title: "The Challenge: Legacy Infrastructure Endangering Patient Care",
+                    content: "HealthFirst Diagnostics, serving 2.3 million patients across Canada, faced a crisis. Their on-premise infrastructure, hosting 850TB of critical medical imaging data, was failing. Radiologists waited 8-12 minutes to access a single MRI scan, delaying urgent diagnoses. The aging hardware required $2.4M in annual maintenance, with frequent outages risking patient safety. Compliance with evolving healthcare regulations was becoming impossible with their legacy security framework.",
+                    metrics: ["850TB medical data", "8-12 min load times", "$2.4M maintenance costs", "15% monthly downtime"]
+                },
+                solution: {
+                    title: "The Solution: Ultra-Secure Cloud Healthcare Platform",
+                    content: "Our certified healthcare cloud architects designed a HIPAA-compliant, fault-tolerant AWS infrastructure. The solution included: Multi-region data replication with 99.99% uptime guarantee, advanced encryption (AES-256) for data at rest and in transit, intelligent caching layer for instant image retrieval, automated backup and disaster recovery systems, real-time security monitoring and threat detection, and seamless integration with existing PACS and HIS systems.",
+                    technologies: ["AWS", "DICOM", "HL7 FHIR", "CloudFormation", "GuardDuty", "KMS"]
+                },
+                results: [
+                    { value: "300%", label: "Faster Image Access" },
+                    { value: "99.99%", label: "System Uptime" },
+                    { value: "68%", label: "Cost Reduction" },
+                    { value: "100%", label: "HIPAA Compliance" }
+                ],
+                testimonial: {
+                    text: "The speed improvement is literally saving lives. Our radiologists can now provide critical diagnoses in emergency situations within minutes, not hours.",
+                    author: "Dr. James Chen",
+                    role: "Chief Medical Officer",
+                    avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150&h=150&fit=crop&crop=face"
+                }
+            },
+            {
+                id: 'cs3',
+                serviceId: 's4',
+                client: "RetailRight Corp.",
+                industry: "E-commerce & Retail",
+                location: "Austin, Texas",
+                title: "Unified Data Platform Drives 340% Increase in Marketing ROI",
+                subtitle: "Advanced Analytics Transform Customer Experience and Revenue",
+                timeline: "5 months implementation",
+                teamSize: "10 data engineers",
+                challenge: {
+                    title: "The Challenge: $50M in Revenue Lost to Data Silos",
+                    content: "RetailRight Corp., with $850M annual revenue across 200+ stores and online channels, was bleeding money due to fragmented data. Customer information was scattered across 23 different systems including Salesforce, Shopify, in-store POS, email platforms, and social media tools. This fragmentation resulted in duplicate marketing spend, inventory mismatches, and missed personalization opportunities worth an estimated $50M annually in lost revenue.",
+                    metrics: ["23 disconnected systems", "$50M revenue loss", "67% cart abandonment", "340% customer acquisition cost variance"]
+                },
+                solution: {
+                    title: "The Solution: Real-Time Customer Intelligence Platform",
+                    content: "We built a modern data lakehouse architecture on Google Cloud Platform, creating a single source of truth for all customer interactions. The platform features: Real-time data ingestion from all touchpoints, advanced customer segmentation using machine learning, predictive analytics for inventory optimization, personalized recommendation engines, automated marketing campaign optimization, and comprehensive executive dashboards with real-time KPIs.",
+                    technologies: ["BigQuery", "Dataflow", "Looker", "Python", "TensorFlow", "Pub/Sub"]
+                },
+                results: [
+                    { value: "340%", label: "Marketing ROI Increase" },
+                    { value: "67%", label: "Customer Retention Boost" },
+                    { value: "45%", label: "Inventory Optimization" },
+                    { value: "$85M", label: "Additional Annual Revenue" }
+                ],
+                testimonial: {
+                    text: "The unified view of our customers has been transformative. We've gone from shooting in the dark to laser-focused precision in every interaction.",
+                    author: "Sarah Martinez",
+                    role: "Chief Marketing Officer",
+                    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face"
+                }
+            }
+        ];
+
+        const servicesData = {
+            'ai-automation': {
+                id: 's1',
+                title: "AI & Automation",
+                icon: ComputerIcon,
+                tagline: "Intelligent process automation and AI-powered workflows that transform operations",
+                description: "Transform your business with cutting-edge AI solutions. Our intelligent automation platforms eliminate repetitive tasks, predict outcomes, and drive unprecedented efficiency gains.",
+                features: [
+                    "Custom Machine Learning models for predictive analytics",
+                    "Robotic Process Automation (RPA) for complex workflows",
+                    "Natural Language Processing for document automation",
+                    "Computer Vision for quality control and analysis"
+                ],
+                caseStudyId: 'cs1'
+            },
+            'web-services': {
+                id: 's2',
+                title: "Web Development",
+                icon: WebIcon,
+                tagline: "Modern web applications and digital experiences built for scale",
+                description: "Create exceptional digital experiences with our full-stack development expertise. From enterprise applications to customer-facing platforms, we build for performance and growth.",
+                features: [
+                    "Progressive Web Apps with native-like performance",
+                    "Scalable microservices architecture",
+                    "Modern React/Node.js development",
+                    "API-first development approach"
+                ],
+                caseStudyId: null
+            },
+            'cloud-services': {
+                id: 's3',
+                title: "Cloud Solutions",
+                icon: CloudIcon,
+                tagline: "Secure, scalable cloud infrastructure and migration services",
+                description: "Harness the power of cloud computing with our certified expertise across AWS, Azure, and GCP. Build resilient, cost-effective infrastructure that scales with your ambitions.",
+                features: [
+                    "Zero-downtime cloud migration strategies",
+                    "DevOps and CI/CD pipeline implementation",
+                    "Serverless architecture for optimal cost efficiency",
+                    "24/7 managed services and security monitoring"
+                ],
+                caseStudyId: 'cs2'
+            },
+            'data-analytics': {
+                id: 's4',
+                title: "Data Analytics",
+                icon: AnalyticsIcon,
+                tagline: "Transform raw data into actionable business intelligence",
+                description: "Unlock the power of your data with advanced analytics and machine learning. Make data-driven decisions that fuel growth and competitive advantage.",
+                features: [
+                    "Real-time business intelligence dashboards",
+                    "Advanced predictive analytics and forecasting",
+                    "Data warehouse and lake house architecture",
+                    "Custom ML models for business insights"
+                ],
+                caseStudyId: 'cs3'
+            },
+            'system-integrations': {
+                id: 's5',
+                title: "System Integration",
+                icon: IntegrationIcon,
+                tagline: "Seamlessly connect systems for unified operations",
+                description: "Break down silos and create unified IT ecosystems. Our integration expertise connects disparate systems, automates workflows, and creates single sources of truth.",
+                features: [
+                    "Enterprise service bus implementation",
+                    "API development and third-party integrations",
+                    "Legacy system modernization",
+                    "Workflow automation and orchestration"
+                ],
+                caseStudyId: null
+            },
+            'it-support': {
+                id: 's6',
+                title: "IT Support & Consulting",
+                icon: SupportIcon,
+                tagline: "Strategic IT guidance and 24/7 support services",
+                description: "Focus on your core business while we handle your IT infrastructure. Strategic consulting, proactive monitoring, and round-the-clock support keep you running smoothly.",
+                features: [
+                    "Virtual CIO services and IT strategy",
+                    "Proactive monitoring and maintenance",
+                    "Cybersecurity audits and compliance",
+                    "24/7 global support desk"
+                ],
+                caseStudyId: null
+            }
+        };
+
+        // --- UI Components ---
+        const PageWrapper = ({ children }) => (
+            <div className="animate-fadeIn">{children}</div>
+        );
+
+        const Navbar = ({ setPage }) => {
+            const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
+            const navigate = (page) => {
+                setPage(page);
+                setIsMobileMenuOpen(false);
+                window.scrollTo(0, 0);
+            };
+
+            return (
+                <nav className="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between items-center h-20">
+                            <button onClick={() => navigate('home')} className="flex items-center space-x-3 group">
+                                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <BoltIcon />
+                                </div>
+                                <span className="font-bold text-2xl bg-gradient-to-r from-blue-600 to-slate-800 bg-clip-text text-transparent">VSO Solutions</span>
+                            </button>
+
+                            <div className="hidden md:flex items-center space-x-8">
+                                <button onClick={() => navigate('home')} className="text-slate-600 hover:text-blue-600 font-medium transition-colors">Home</button>
+                                <button onClick={() => navigate('case-studies')} className="text-slate-600 hover:text-blue-600 font-medium transition-colors">Success Stories</button>
+                                <button onClick={() => navigate('about')} className="text-slate-600 hover:text-blue-600 font-medium transition-colors">About</button>
+                                <button onClick={() => navigate('appointment')} className="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 hover:shadow-lg transition-all hover:scale-105">
+                                    Book Consultation
+                                </button>
+                            </div>
+
+                            <button className="md:hidden p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                                <svg className="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
+                                </svg>
+                            </button>
                         </div>
-                        <span class="font-bold text-xl text-white">VSO Solutions</span>
-                    </a>
-                    <p class="text-sm">Driving digital transformation with intelligent IT solutions.</p>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-white mb-4">Quick Links</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#services" class="hover:text-sky-400 transition-colors">Services</a></li>
-                        <li><a href="#solutions" class="hover:text-sky-400 transition-colors">Solutions</a></li>
-                        <li><a href="#case-studies" class="hover:text-sky-400 transition-colors">Case Studies</a></li>
-                        <li><a href="#about" class="hover:text-sky-400 transition-colors">About Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-white mb-4">Services</h3>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#services" class="hover:text-sky-400 transition-colors">AI Automation</a></li>
-                        <li><a href="#services" class="hover:text-sky-400 transition-colors">Web Services</a></li>
-                        <li><a href="#services" class="hover:text-sky-400 transition-colors">Cloud Solutions</a></li>
-                        <li><a href="#services" class="hover:text-sky-400 transition-colors">Data Analytics</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-white mb-4">Contact</h3>
-                     <ul class="space-y-2 text-sm">
-                        <li><a href="mailto:contact@vso.com" class="hover:text-sky-400 transition-colors">contact@vso.com</a></li>
-                        <li><a href="tel:+123456789" class="hover:text-sky-400 transition-colors">+1 (234) 567-89</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-8 pt-8 border-t border-slate-700 text-center text-sm">
-                <p>&copy; 2025 VSO Solutions. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+                    </div>
 
-    <script>
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobileMenuButton');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+                    {isMobileMenuOpen && (
+                        <div className="md:hidden bg-white border-t border-slate-200">
+                            <div className="px-4 py-3 space-y-2">
+                                <button onClick={() => navigate('home')} className="w-full text-left block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">Home</button>
+                                <button onClick={() => navigate('case-studies')} className="w-full text-left block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">Success Stories</button>
+                                <button onClick={() => navigate('about')} className="w-full text-left block px-4 py-3 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">About</button>
+                                <button onClick={() => navigate('appointment')} className="w-full text-center block px-4 py-3 bg-blue-600 text-white rounded-lg font-semibold">Book Consultation</button>
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
         
-        // Close mobile menu when a link is clicked
-        const mobileNavLinks = mobileMenu.querySelectorAll('a');
-        mobileNavLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
+        const Footer = ({ setPage }) => (
+            <footer className="bg-slate-800 text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <div className="grid md:grid-cols-4 gap-8">
+                        <div className="md:col-span-2">
+                            <div className="flex items-center space-x-3 mb-6">
+                                <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                                    <BoltIcon />
+                                </div>
+                                <span className="font-bold text-xl text-white">VSO Solutions</span>
+                            </div>
+                            <p className="text-slate-400 max-w-md">
+                                VSO Solutions is a global leader in enterprise digital transformation, building intelligent futures for the world's most ambitious organizations.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-white mb-4">Quick Links</h3>
+                            <ul className="space-y-3 text-slate-400">
+                                <li><button onClick={() => setPage('home')} className="hover:text-blue-400 transition-colors">Home</button></li>
+                                <li><button onClick={() => setPage('case-studies')} className="hover:text-blue-400 transition-colors">Success Stories</button></li>
+                                <li><button onClick={() => setPage('about')} className="hover:text-blue-400 transition-colors">About</button></li>
+                                <li><button onClick={() => setPage('appointment')} className="hover:text-blue-400 transition-colors">Contact</button></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-white mb-4">Contact</h3>
+                            <ul className="space-y-3 text-slate-400">
+                                <li><a href="mailto:info@vsolabs.com" className="hover:text-blue-400 transition-colors">info@vsolabs.com</a></li>
+                                <li><a href="tel:+1234567890" className="hover:text-blue-400 transition-colors">+1 (234) 567-890</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="mt-12 pt-8 border-t border-slate-700 text-center text-slate-500">
+                        <p>&copy; {new Date().getFullYear()} VSO Solutions. All rights reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        );
+
+        // --- Page Components ---
+        const HomePage = ({ setPage }) => (
+            <PageWrapper>
+                <section className="relative pt-32 pb-20 flex items-center justify-center min-h-screen bg-white">
+                    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                         <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold mb-6">
+                            <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                            Trusted by 250+ Global Enterprises
+                        </div>
+                        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight text-slate-900">
+                            Transform Your
+                            <br/>
+                            <span className="bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">Digital Future</span>
+                        </h1>
+                        <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-10">
+                            Enterprise-grade AI, cloud, and automation solutions that drive exponential growth and operational excellence.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button onClick={() => setPage('appointment')} className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-lg hover:bg-blue-700 hover:shadow-xl transition-all">
+                                Start Your Transformation
+                            </button>
+                            <button onClick={() => document.getElementById('services')?.scrollIntoView()} className="px-8 py-4 bg-white text-slate-800 rounded-lg font-semibold text-lg border border-slate-300 hover:border-blue-600 hover:text-blue-600 transition-all">
+                                Explore Solutions
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="services" className="py-24 bg-slate-50">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-slate-900">Our Expertise</h2>
+                            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+                                Comprehensive technology solutions designed for enterprise-scale challenges.
+                            </p>
+                        </div>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {Object.keys(servicesData).map((key) => {
+                                const service = servicesData[key];
+                                return (
+                                    <div key={key} className="card-hover group bg-white p-8 rounded-xl border border-slate-200">
+                                        <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                                            <service.icon />
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-slate-900 mb-3">{service.title}</h3>
+                                        <p className="text-slate-600 mb-6">{service.tagline}</p>
+                                        <button onClick={() => setPage(`service/${key}`)} className="font-semibold text-blue-600 hover:text-blue-700 transition-colors group-hover:underline">
+                                            Explore Solution →
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </section>
+            </PageWrapper>
+        );
+
+        const ServicePage = ({ serviceKey, setPage }) => {
+            const service = servicesData[serviceKey];
+            const caseStudy = service?.caseStudyId ? caseStudiesData.find(cs => cs.id === service.caseStudyId) : null;
+
+            if (!service) return <HomePage setPage={setPage} />;
+
+            return (
+                <PageWrapper>
+                    <div className="pt-20 bg-white">
+                        <div className="py-24 bg-slate-50">
+                            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                                <div className="w-20 h-20 mx-auto mb-6 bg-blue-100 rounded-2xl flex items-center justify-center">
+                                    <service.icon />
+                                </div>
+                                <h1 className="text-5xl font-bold text-slate-900">{service.title}</h1>
+                                <p className="mt-4 text-xl text-slate-600 max-w-3xl mx-auto">{service.tagline}</p>
+                            </div>
+                        </div>
+
+                        <div className="py-24">
+                            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-3 gap-16">
+                                <div className="lg:col-span-2">
+                                    <h2 className="text-3xl font-bold text-slate-900 mb-4">Our Approach</h2>
+                                    <p className="text-lg text-slate-600 leading-relaxed mb-12">{service.description}</p>
+                                    
+                                    <h3 className="text-3xl font-bold text-slate-900 mb-6">Core Capabilities</h3>
+                                    <ul className="space-y-4">
+                                        {service.features.map((feature, index) => (
+                                            <li key={index} className="flex items-start">
+                                                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center mr-4 mt-1">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                                                </div>
+                                                <p className="text-slate-600 text-lg">{feature}</p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                
+                                <div className="lg:col-span-1">
+                                    {caseStudy ? (
+                                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-8 sticky top-24">
+                                            <h3 className="text-xl font-bold text-slate-900 mb-2">Success Story</h3>
+                                            <p className="text-sm text-slate-500 mb-4">{caseStudy.client}</p>
+                                            <h4 className="text-lg font-semibold text-blue-600 mb-4">{caseStudy.title}</h4>
+                                            <p className="text-slate-600 text-sm mb-6">{caseStudy.challenge.content.substring(0, 150)}...</p>
+                                            <button onClick={() => setPage('case-studies')} className="w-full text-center px-4 py-2 bg-white border border-slate-300 rounded-lg font-semibold hover:border-slate-400 transition">
+                                                Read Full Case Study
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="bg-slate-50 border border-slate-200 rounded-lg p-8 text-center sticky top-24">
+                                             <h3 className="text-xl font-bold text-slate-900 mb-4">Ready to Get Started?</h3>
+                                             <p className="text-slate-600 mb-6">Let's discuss how our {service.title} expertise can transform your business.</p>
+                                              <button onClick={() => setPage('appointment')} className="w-full px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all">
+                                                Book a Free Call
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </PageWrapper>
+            );
+        };
+
+        const CaseStudiesPage = ({ setPage }) => (
+            <PageWrapper>
+                <div className="pt-20 bg-white">
+                    <div className="py-24 bg-slate-50">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4">
+                                Success Stories
+                            </h1>
+                            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                                Real transformations. Measurable results. Lasting partnerships.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div className="py-24">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+                            {caseStudiesData.map((cs) => {
+                                const service = Object.values(servicesData).find(s => s.id === cs.serviceId);
+                                return (
+                                    <div key={cs.id} className="bg-white border border-slate-200 rounded-lg overflow-hidden grid lg:grid-cols-2 shadow-lg">
+                                        <div className="p-8 lg:p-12">
+                                            <span className="inline-block px-3 py-1 text-sm font-semibold text-blue-800 bg-blue-100 rounded-full mb-4">
+                                                {service.title}
+                                            </span>
+                                            <p className="text-slate-600 font-semibold">{cs.client}</p>
+                                            <h2 className="text-3xl font-bold text-slate-900 mt-2 mb-6">{cs.title}</h2>
+                                            
+                                            <div className="space-y-6 text-slate-600">
+                                                <div>
+                                                    <h4 className="font-semibold text-slate-800 text-lg mb-2">{cs.challenge.title}</h4>
+                                                    <p>{cs.challenge.content}</p>
+                                                </div>
+                                                 <div>
+                                                    <h4 className="font-semibold text-slate-800 text-lg mb-2">{cs.solution.title}</h4>
+                                                    <p>{cs.solution.content}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="bg-slate-50 p-8 lg:p-12">
+                                             <h3 className="text-2xl font-bold text-slate-900 mb-6">Quantifiable Results</h3>
+                                             <div className="grid grid-cols-2 gap-8">
+                                                 {cs.results.map(result => (
+                                                     <div key={result.label}>
+                                                         <div className="text-4xl lg:text-5xl font-bold text-blue-600">{result.value}</div>
+                                                         <div className="text-slate-600 mt-1">{result.label}</div>
+                                                     </div>
+                                                 ))}
+                                             </div>
+                                             <div className="mt-10 pt-8 border-t border-slate-200">
+                                                <div className="flex items-start space-x-4">
+                                                    <img src={cs.testimonial.avatar} alt={cs.testimonial.author} className="w-14 h-14 rounded-full"/>
+                                                    <div>
+                                                        <p className="text-slate-600 italic">"{cs.testimonial.text}"</p>
+                                                        <div className="text-slate-900 font-bold mt-2">{cs.testimonial.author}</div>
+                                                        <div className="text-slate-500 text-sm">{cs.testimonial.role}</div>
+                                                    </div>
+                                                </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </PageWrapper>
+        );
+
+        const AboutPage = ({ setPage }) => (
+            <PageWrapper>
+                <div className="pt-20 bg-white">
+                    <div className="py-24 bg-slate-50">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-4">
+                                Pioneering the Next Wave of Digital Innovation
+                            </h1>
+                            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                                We are a new and agile team of innovators, founded just two months ago, dedicated to building the intelligent and efficient IT solutions that power tomorrow's enterprises.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="py-24">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
+                            <div>
+                                <h2 className="text-3xl font-bold text-slate-900 mb-4">Our Mission</h2>
+                                <p className="text-lg text-slate-600 leading-relaxed">
+                                   To empower forward-thinking businesses with agile and transformative technology. As a new player in the market, we aim to be a nimble, strategic partner, turning complex challenges into clear business advantages and rapid growth for our clients.
+                                </p>
+                            </div>
+                            <div>
+                                 <h2 className="text-3xl font-bold text-slate-900 mb-4">Our Vision</h2>
+                                <p className="text-lg text-slate-600 leading-relaxed">
+                                   To become a disruptive force in enterprise IT, creating a future where businesses can leverage the latest in automation, data, and cloud technology to outmaneuver the competition and define new market opportunities.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </PageWrapper>
+        );
+
+        const AppointmentPage = () => {
+             const [formData, setFormData] = React.useState({
+                fullName: '',
+                email: '',
+                company: '',
+                country: '',
+                phone: '',
+                projectType: '',
+                budget: '',
+                timeline: '',
+                selectedDate: '',
+                selectedTime: '03:00 PM',
+                message: '',
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             });
-        });
-        
-        // Appointment calendar interactivity
-        const calendarDays = document.querySelectorAll('.calendar-day:not(.disabled)');
-        const timeSlots = document.querySelectorAll('.time-slot');
+            
+            const [isSubmitting, setIsSubmitting] = React.useState(false);
+            const [submitStatus, setSubmitStatus] = React.useState('');
 
-        function clearSelection(elements, className) {
-            elements.forEach(el => el.classList.remove(className));
+            const handleInputChange = (e) => {
+                setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+            };
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                setSubmitStatus('');
+                
+                const templateParams = {
+                    to_email: 'info@vsolabs.com',
+                    from_name: formData.fullName,
+                    reply_to: formData.email,
+                    company: formData.company,
+                    country: formData.country,
+                    phone: formData.phone || 'Not provided',
+                    project_type: formData.projectType,
+                    budget: formData.budget,
+                    timeline: formData.timeline,
+                    date: formData.selectedDate,
+                    time: formData.selectedTime,
+                    timezone: formData.timezone,
+                    message: formData.message || 'No additional details provided'
+                };
+
+                try {
+                    // NOTE: Replace with your actual Service ID, Template ID, and Public Key from your EmailJS account.
+                    // await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams);
+                    
+                    // This is a simulation for demonstration purposes.
+                    console.log("Simulating EmailJS send with params:", templateParams);
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+
+                    setSubmitStatus('success');
+                } catch (error) {
+                    console.error('EmailJS failed to send.', error);
+                    setSubmitStatus('error');
+                }
+
+                setIsSubmitting(false);
+            };
+            
+            const today = new Date().toISOString().split('T')[0];
+            const timeSlots = ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'];
+            const projectTypes = ['AI & Automation', 'Cloud Migration', 'Data Analytics', 'Web Development', 'System Integration', 'IT Consulting'];
+            const budgetRanges = ['< $50K', '$50K - $200K', '$200K - $500K', '$500K - $1M', '$1M+'];
+            const timelines = ['ASAP', '1-3 months', '3-6 months', '6-12 months', '12+ months'];
+            const countries = ['United States', 'Canada', 'United Kingdom', 'Germany', 'France', 'Australia', 'Japan', 'India', 'Singapore', 'Other'];
+
+            if (submitStatus === 'success') {
+                return (
+                    <PageWrapper>
+                        <div className="pt-20 min-h-screen bg-white flex items-center justify-center">
+                           <div className="max-w-2xl mx-auto px-4 text-center">
+                                <div className="success-indicator w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8">
+                                    <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <h1 className="text-4xl font-bold text-slate-900 mb-4">Request Submitted!</h1>
+                                <p className="text-lg text-slate-600 mb-8">Thank you. Our team will contact you within 2 business hours to confirm your strategy session.</p>
+                            </div>
+                        </div>
+                    </PageWrapper>
+                );
+            }
+
+            return (
+                <PageWrapper>
+                   <div className="pt-20 bg-slate-50">
+                        <div className="py-20 text-center">
+                             <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Book Your Strategy Session</h1>
+                             <p className="text-lg text-slate-600 max-w-2xl mx-auto">Schedule a free 45-minute consultation with our solution architects to discuss your project in detail.</p>
+                        </div>
+                        <div className="pb-24">
+                            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white p-8 sm:p-12 rounded-lg shadow-lg border border-slate-200">
+                                <form onSubmit={handleSubmit} className="space-y-8">
+                                    
+                                    {/* Section 1: Personal Info */}
+                                    <div className="p-6 border border-slate-200 rounded-lg">
+                                        <h2 className="text-2xl font-bold text-slate-900 mb-6">1. Your Information</h2>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-2">Full Name *</label>
+                                                <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" required />
+                                            </div>
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-2">Work Email *</label>
+                                                <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" required />
+                                            </div>
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-2">Company Name *</label>
+                                                <input type="text" name="company" value={formData.company} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" required />
+                                            </div>
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-2">Country *</label>
+                                                <select name="country" value={formData.country} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" required>
+                                                    <option value="" disabled>Select a country...</option>
+                                                    {countries.map(c => <option key={c} value={c}>{c}</option>)}
+                                                </select>
+                                            </div>
+                                            <div className="md:col-span-2">
+                                                <label className="block text-slate-700 font-medium mb-2">Phone Number</label>
+                                                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Section 2: Project Details */}
+                                    <div className="p-6 border border-slate-200 rounded-lg">
+                                        <h2 className="text-2xl font-bold text-slate-900 mb-6">2. Project Details</h2>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-2">Service of Interest *</label>
+                                                <select name="projectType" value={formData.projectType} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" required>
+                                                     <option value="" disabled>Select a service...</option>
+                                                    {projectTypes.map(p => <option key={p} value={p}>{p}</option>)}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-2">Estimated Budget *</label>
+                                                <select name="budget" value={formData.budget} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" required>
+                                                    <option value="" disabled>Select a range...</option>
+                                                    {budgetRanges.map(b => <option key={b} value={b}>{b}</option>)}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-2">Project Timeline *</label>
+                                                <select name="timeline" value={formData.timeline} onChange={handleInputChange} className="form-input w-full px-4 py-3 rounded-md" required>
+                                                     <option value="" disabled>Select a timeline...</option>
+                                                    {timelines.map(t => <option key={t} value={t}>{t}</option>)}
+                                                </select>
+                                            </div>
+                                        </div>
+                                         <div className="mt-6">
+                                            <label className="block text-slate-700 font-medium mb-2">Tell us about your project</label>
+                                            <textarea name="message" value={formData.message} onChange={handleInputChange} rows="4" className="form-input w-full px-4 py-3 rounded-md"></textarea>
+                                        </div>
+                                    </div>
+
+                                    {/* Section 3: Scheduling */}
+                                     <div className="p-6 border border-slate-200 rounded-lg">
+                                        <h2 className="text-2xl font-bold text-slate-900 mb-6">3. Preferred Meeting Time</h2>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-3">Preferred Date *</label>
+                                                <input type="date" name="selectedDate" value={formData.selectedDate} onChange={handleInputChange} min={today} className="form-input w-full px-4 py-3 rounded-md" required />
+                                            </div>
+                                            <div>
+                                                <label className="block text-slate-700 font-medium mb-3">Preferred Time Slot*</label>
+                                                <div className="grid grid-cols-3 gap-3">
+                                                    {timeSlots.map(time => (
+                                                        <button key={time} type="button" onClick={() => setFormData(prev => ({...prev, selectedTime: time}))} className={`time-slot p-2 rounded-lg text-sm font-medium ${formData.selectedTime === time ? 'selected' : ''}`}>
+                                                            {time}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                <p className="text-slate-500 text-xs mt-2">Your timezone: {formData.timezone}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                     <div>
+                                        {submitStatus === 'error' && <p className="text-red-600 text-center mb-4">There was an error. Please try again or email us directly.</p>}
+                                        <button type="submit" disabled={isSubmitting} className="w-full px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
+                                            {isSubmitting ? <span className="loading-dots">Submitting</span> : "Schedule My Consultation"}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </PageWrapper>
+            );
+        };
+
+        // --- Main App Component ---
+        function App() {
+            const [currentPage, setCurrentPage] = React.useState('home');
+            
+            const renderPage = () => {
+                if (currentPage.startsWith('service/')) {
+                    const serviceKey = currentPage.replace('service/', '');
+                    return <ServicePage serviceKey={serviceKey} setPage={setCurrentPage} />;
+                }
+                
+                switch (currentPage) {
+                    case 'case-studies': return <CaseStudiesPage setPage={setCurrentPage} />;
+                    case 'about': return <AboutPage setPage={setCurrentPage} />;
+                    case 'appointment': return <AppointmentPage />;
+                    default: return <HomePage setPage={setCurrentPage} />;
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-slate-50">
+                    <Navbar setPage={setCurrentPage} />
+                    <main>
+                        {renderPage()}
+                    </main>
+                    <Footer setPage={setCurrentPage} />
+                </div>
+            );
         }
 
-        calendarDays.forEach(day => {
-            day.addEventListener('click', () => {
-                clearSelection(calendarDays, 'selected');
-                day.classList.add('selected');
-            });
-        });
-
-        timeSlots.forEach(slot => {
-            slot.addEventListener('click', () => {
-                clearSelection(timeSlots, 'selected');
-                slot.classList.add('selected');
-            });
-        });
-
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
     </script>
 </body>
 </html>
+
